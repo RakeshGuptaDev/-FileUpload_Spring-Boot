@@ -1,0 +1,33 @@
+version: '3'
+
+    
+
+services:
+  fileupload-database:
+    image: 'mysql:latest'
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=document
+    ports:
+      - "3307:3306"
+    volumes:
+       - mysql-room:/var/lib/mysql
+  fileupload-information:
+    image: fileupload.jar
+    ports:
+      - "9999:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://fileupload-database:3306/document
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "root"
+    build:
+      context: "./"
+      dockerfile: "Dockerfile"
+    depends_on:
+      - fileupload-database
+      
+volumes:
+  mysql-room:
+
+    
